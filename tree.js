@@ -7,12 +7,11 @@ class Node {
 }
 
 // Build a tree class/factory to accept an array when initialized.
-class Tree {
+export class Tree {
     constructor(array) {
         this.root = this.buildTree([...new Set(array)].sort((a, b) => a - b));
     }
 
-    // Write a buildTree(array) function
     buildTree(array) {
         if (array.length === 0) return null;
 
@@ -25,7 +24,6 @@ class Tree {
         return root;
     }
 
-    // Write insert(value) and deleteItem(value) functions that insert/delete the given value.
     insert(value, root = this.root) {
         if (root === null) return new Node(value);
 
@@ -37,7 +35,7 @@ class Tree {
         return root;
     }
 
-    deleteItem (value, root = this.root) {
+    deleteItem(value, root = this.root) {
         if (root === null) return root;
 
         if (value < root.data) {
@@ -65,15 +63,14 @@ class Tree {
     prettyPrint(node = this.root, prefix = "", isLeft = true) {
         if (node === null) return;
         if (node.right !== null) {
-          this.prettyPrint(node.right, `${prefix}${isLeft ? "│   " : "    "}`, false);
+            this.prettyPrint(node.right, `${prefix}${isLeft ? "│   " : "    "}`, false);
         }
         console.log(`${prefix}${isLeft ? "└── " : "┌── "}${node.data}`);
         if (node.left !== null) {
-          this.prettyPrint(node.left, `${prefix}${isLeft ? "    " : "│   "}`, true);
+            this.prettyPrint(node.left, `${prefix}${isLeft ? "    " : "│   "}`, true);
         }
     }
 
-    // Write a find(value) function that returns the node with the given value.
     find(value, root = this.root) {
         if (root === null || root.data === value) {
             return root;
@@ -115,9 +112,8 @@ class Tree {
             if (node === null) return;
 
             traverse(node.left);
-            callback(node.data);
+            callback(node.data); // Ensure we are accessing 'node.data'
             traverse(node.right);
-            
         };
 
         traverse(this.root);
@@ -129,12 +125,11 @@ class Tree {
         }
 
         const traverse = (node) => {
-            if (node === null)  return;
+            if (node === null) return;
 
             callback(node.data);
             traverse(node.left);
             traverse(node.right);
-            
         };
 
         traverse(this.root);
@@ -185,43 +180,44 @@ class Tree {
                 findDepth(node.right, currentDepth + 1);
             }
         };
-        
+
         findDepth(this.root, 0);
+        return depthCount;
     }
 
     isBalanced() {
         const checkBalance = (node) => {
-          if (node === null) {
-            return { isBalanced: true, height: -1 };
-          }
-      
-          // Recursively check the left and right subtrees
-          const left = checkBalance(node.left);
-          const right = checkBalance(node.right);
-      
-          // If either subtree is unbalanced, return immediately
-          if (!left.isBalanced || !right.isBalanced) {
-            return { isBalanced: false, height: 0 }; // Return height as 0 when unbalanced
-          }
-      
-          // Calculate the current node's height
-          const height = Math.max(left.height, right.height) + 1;
-      
-          // Check if the current node is balanced (difference in heights is no more than 1)
-          const isBalanced = Math.abs(left.height - right.height) <= 1;
-      
-          return { isBalanced, height };
+            if (node === null) {
+                return { isBalanced: true, height: -1 };
+            }
+
+            // Recursively check the left and right subtrees
+            const left = checkBalance(node.left);
+            const right = checkBalance(node.right);
+
+            // If either subtree is unbalanced, return immediately
+            if (!left.isBalanced || !right.isBalanced) {
+                return { isBalanced: false, height: 0 }; // Return height as 0 when unbalanced
+            }
+
+            // Calculate the current node's height
+            const height = Math.max(left.height, right.height) + 1;
+
+            // Check if the current node is balanced (difference in heights is no more than 1)
+            const isBalanced = Math.abs(left.height - right.height) <= 1;
+
+            return { isBalanced, height };
         };
-      
+
         return checkBalance(this.root).isBalanced;
-      }
+    }
 
     rebalance() {
         const values = [];
-        this.inOrder((node) => {
-          values.push(node.data);
-        });
+        this.inOrder((node) => values.push(node.data));
 
-        this.root = this.buildTree(values);
-    }      
+        if (values.length > 0) {
+            this.root = this.buildTree(values);
+        }
+    }
 }
