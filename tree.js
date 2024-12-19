@@ -139,4 +139,20 @@ class Tree {
 
         traverse(this.root);
     }
+
+    postOrder(callback) {
+        if (typeof callback !== "function") {
+            throw new Error("A callback function is required.");
+        }
+
+        const traverse = (node) => {
+            if (node === null) return;
+
+            traverse(node.left);
+            traverse(node.right);
+            callback(node.data);
+        };
+
+        traverse(this.root);
+    }
 };
