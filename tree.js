@@ -155,4 +155,73 @@ class Tree {
 
         traverse(this.root);
     }
-};
+
+    height(node) {
+        if (node === null) return -1;
+
+        const leftHeight = this.height(node.left);
+        const rightHeight = this.height(node.right);
+
+        return Math.max(leftHeight, rightHeight) + 1;
+    }
+
+    depth(node) {
+        if (node === null) return -1;
+
+        let currentNode = this.root;
+        let depthCount = 0;
+
+        const findDepth = (node, currentDepth) => {
+            if (node === null) return;
+
+            if (node === currentNode) {
+                depthCount = currentDepth;
+                return;
+            }
+
+            if (currentNode.data < node.data) {
+                findDepth(node.left, currentDepth + 1);
+            } else if (currentNode.data > node.data) {
+                findDepth(node.right, currentDepth + 1);
+            }
+        };
+        
+        findDepth(this.root, 0);
+    }
+
+    isBalanced() {
+        const checkBalance = (node) => {
+          if (node === null) {
+            return { isBalanced: true, height: -1 };
+          }
+      
+          // Recursively check the left and right subtrees
+          const left = checkBalance(node.left);
+          const right = checkBalance(node.right);
+      
+          // If either subtree is unbalanced, return immediately
+          if (!left.isBalanced || !right.isBalanced) {
+            return { isBalanced: false, height: 0 }; // Return height as 0 when unbalanced
+          }
+      
+          // Calculate the current node's height
+          const height = Math.max(left.height, right.height) + 1;
+      
+          // Check if the current node is balanced (difference in heights is no more than 1)
+          const isBalanced = Math.abs(left.height - right.height) <= 1;
+      
+          return { isBalanced, height };
+        };
+      
+        return checkBalance(this.root).isBalanced;
+      }
+
+    rebalance() {
+        const values = [];
+        this.inOrder((node) => {
+          values.push(node.data);
+        });
+
+        this.root = this.buildTree(values);
+    }      
+}
