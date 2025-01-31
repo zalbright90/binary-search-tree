@@ -88,19 +88,16 @@ export class Tree {
             throw new Error("A callback function is required.");
         }
 
-        const traverse = (queue) => {
-            if (queue.length === 0) return;
+        const queue = [];
+        if (this.root !== null) queue.push(this.root);
 
+        while (queue.length > 0) {
             const currentNode = queue.shift();
             callback(currentNode);
 
             if (currentNode.left !== null) queue.push(currentNode.left);
             if (currentNode.right !== null) queue.push(currentNode.right);
-
-            traverse(queue);
-        };
-
-        if (this.root !== null) traverse([this.root]);
+        }
     }
 
     inOrder(callback) {
@@ -112,7 +109,7 @@ export class Tree {
             if (node === null) return;
 
             traverse(node.left);
-            callback(node.data); // Ensure we are accessing 'node.data'
+            callback(node); // Pass the entire node, not just node.data
             traverse(node.right);
         };
 
@@ -127,7 +124,7 @@ export class Tree {
         const traverse = (node) => {
             if (node === null) return;
 
-            callback(node.data);
+            callback(node);
             traverse(node.left);
             traverse(node.right);
         };
@@ -145,7 +142,7 @@ export class Tree {
 
             traverse(node.left);
             traverse(node.right);
-            callback(node.data);
+            callback(node);
         };
 
         traverse(this.root);
@@ -215,9 +212,6 @@ export class Tree {
     rebalance() {
         const values = [];
         this.inOrder((node) => values.push(node.data));
-
-        if (values.length > 0) {
-            this.root = this.buildTree(values);
-        }
+        this.root = this.buildTree(values);
     }
 }

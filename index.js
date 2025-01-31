@@ -46,16 +46,16 @@ tree.rebalance();
 console.log("\nIs the tree balanced after rebalancing?", tree.isBalanced()); // Should print: true
 
 // Step 7: Print out the elements in level, pre-order, post-order, and in-order again after rebalancing
-console.log("\nLevel Order after rebalancing:");
+console.log("\nLevel Order: ");
 tree.levelOrder((node) => console.log(node.data));
 
-console.log("\nPre-order after rebalancing:");
+console.log("\nPre-order: ");
 tree.preOrder((node) => console.log(node.data));
 
-console.log("\nPost-order after rebalancing:");
+console.log("\nPost-order: ");
 tree.postOrder((node) => console.log(node.data));
 
-console.log("\nIn-order after rebalancing:");
+console.log("\nIn-order: ");
 tree.inOrder((node) => console.log(node.data));
 
 tree.prettyPrint();
